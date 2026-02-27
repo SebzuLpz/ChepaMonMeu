@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Para Meu 💖</title>
+    <style>
+      :root {
+        --bg: #fff0f5;
+        --card: #ffffff;
+        --primary: #ff4f81;
+        --primary-dark: #e6366d;
+        --text: #4f2a38;
+        --success: #41b883;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top, #ffe1ec 0%, var(--bg) 45%, #ffeaf2 100%);
+        color: var(--text);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .card {
+        width: min(900px, 100%);
+        background: var(--card);
+        border-radius: 22px;
+        box-shadow: 0 12px 40px rgba(255, 79, 129, 0.2);
+        padding: 30px;
+        border: 1px solid rgba(255, 79, 129, 0.15);
+      }
+
+      h1,
+      h2 {
+        text-align: center;
+        margin-top: 0;
+      }
+
+      .btn {
+        display: inline-block;
+        border: none;
+        border-radius: 999px;
+        background: var(--primary);
+        color: white;
+        padding: 12px 26px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        background: var(--primary-dark);
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .choices {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+      }
+
+      .choice {
+        background: #fff8fb;
+        border-radius: 16px;
+        padding: 12px;
+        border: 2px solid transparent;
+        text-align: center;
+      }
+
+      .choice img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+
+      .choice label {
+        display: block;
+        margin-top: 8px;
+        font-weight: 600;
+      }
+
+      .feedback {
+        text-align: center;
+        margin-top: 14px;
+        min-height: 24px;
+        font-weight: 600;
+      }
+
+      .feedback.error {
+        color: #de3163;
+      }
+
+      .feedback.success {
+        color: var(--success);
+      }
+
+      #messageBox {
+        margin-top: 24px;
+        background: #fff8fb;
+        border-left: 6px solid var(--primary);
+        border-radius: 14px;
+        padding: 18px;
+        white-space: pre-wrap;
+        line-height: 1.55;
+        font-size: 1rem;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 1ch;
+        animation: blink 0.8s infinite;
+        color: var(--primary-dark);
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <section id="intro" class="center">
+        <h1>Hola Meu, te tengo una preguntita 💕</h1>
+        <button id="startBtn" class="btn">Empezar</button>
+      </section>
+
+      <section id="quiz" class="hidden">
+        <h2>¿Cuál de estos pokémons NO es tipo Dragón?</h2>
+        <div class="choices">
+          <div class="choice">
+            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png" alt="Charizard" />
+            <label><input type="radio" name="pokemon" value="charizard" /> Charizard - CartaDeRub</label>
+          </div>
+          <div class="choice">
+            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/384.png" alt="Rayquaza" />
+            <label><input type="radio" name="pokemon" value="rayquaza" /> Rayquaza - TemuGyarados</label>
+          </div>
+          <div class="choice">
+            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/887.png" alt="Dragapult" />
+            <label><input type="radio" name="pokemon" value="dragapult" /> Dragapult - Taylor Swift</label>
+          </div>
+        </div>
+        <div class="center" style="margin-top: 16px">
+          <button id="answerBtn" class="btn">Responder</button>
+        </div>
+        <p id="feedback" class="feedback"></p>
+      </section>
+
+      <section id="letter" class="hidden">
+        <div id="messageBox"></div>
+      </section>
+    </main>
+
+    <script>
+      const startBtn = document.getElementById("startBtn");
+      const answerBtn = document.getElementById("answerBtn");
+      const intro = document.getElementById("intro");
+      const quiz = document.getElementById("quiz");
+      const letter = document.getElementById("letter");
+      const feedback = document.getElementById("feedback");
+      const messageBox = document.getElementById("messageBox");
+
+      const romanticMessage = `Meu
+Hoy cumplimos 10 meses. Diez meses desde que mi mundo encontró un nuevo color, una nueva canción, un nuevo sentido. Y no, no es solo una frase bonita para empezar una carta, es la más pura de las verdades. No sé ni por dónde empezar a agradecerte por todo lo que hemos vivido, porque si intento enumerar cada momento feliz, cada risa, cada mirada, necesitaría un libro, no una simple hoja de papel.
+Desde que llegaste, todo es más bonito, más fácil, más nuestro. Y me encanta eso: lo nuestro. Me encanta cómo hemos construido un mundo solo para dos, con sus propias reglas, sus propios juegos y su propio idioma. Un mundo donde lo más normal del mundo es comportarnos como dos niños pequeños, riéndonos por tonterías, haciendo caras graciosas y creando recuerdos que sé que atesoraré para siempre.
+Dios, cómo me gusta cuando me haces pucheros. No sabes la guerra que me hacen. Me derrito por dentro, es una mezcla de ternura y ganas de comerte a besos que no puedo explicar. Es tan tuyo, tan genuino, tan de Valentina, que me hace amarte aún más. Esos pequeños gestos son los que me recuerdan lo afortunado que soy de tener a alguien tan auténtica a mi lado.
+Y hablando de cosas nuestras... 
+¿Qué sería de nosotros sin Chepamon o Rub o La chica que limpia? Porque no son solo series, es nuestro ritual. Es ese momento del día en el que el mundo se detiene. Verte reír con las ocurrencias de los personajes y más con Rub, comentar cada pendejada, y saber que estamos en sintonía... no tiene precio.
+Y hablando de sintonía, eso es algo que siempre me deja sin palabras: cómo a veces pensamos las mismas pendejadas. Es una locura. Podemos estar en silencio y, de repente, los dos decimos lo mismo o tenemos la misma idea extraña al mismo tiempo. En esos momentos, siento que nuestras almas están bailando al mismo ritmo. Es una conexión que va más allá de las palabras, una complicidad que no había experimentado con nadie. Me hace sentir realmente conectado a ti, como si fuéramos dos mitades de una misma locura.
+Tus locuras van con mis locuras, ¿Recuerdas?
+La verdad es que no sé qué sería de mí sin ti. Llegaste en un momento y de una forma que ni imaginaba, y ahora no concibo mi vida de otra manera que no sea a tu lado. Me has enseñado lo que es querer de verdad, amar de verdad, lo que es sentirse en casa en los brazos de otra persona.
+Y sí, no sé qué será de mí en el futuro. Es una pregunta que a veces da miedo. La vida es incierta y el camino puede ser impredecible. Pero si hay algo de lo que estoy completamente seguro, de lo único que no tengo ni una pizca de duda, es de que quiero que tú estés ahí conmigo. Pase lo que pase, venga lo que venga, quiero que seas tú, Meu, mi compañera, mi niña, mi todo, quien camine a mi lado. Porque un futuro sin ti no es un futuro que me interese vivir.
+Gracias por estos 10 meses. Gracias por cada sonrisa, cada abrazo, cada "te amo" susurrado, cada mirada cómplice. Gracias por ser mi lugar seguro y mi aventura favorita. Te amo muchísimo, más de lo que las palabras pueden expresar.
+Feliz mesversario, mi amor.
+`;
+
+      function typeMessage(text, speed = 20) {
+        messageBox.innerHTML = "<span class='cursor'>|</span>";
+        let i = 0;
+
+        const timer = setInterval(() => {
+          const visible = text.slice(0, i);
+          messageBox.innerHTML = `${visible}<span class='cursor'>|</span>`;
+          i += 1;
+
+          if (i > text.length) {
+            clearInterval(timer);
+            messageBox.textContent = text;
+          }
+        }, speed);
+      }
+
+      startBtn.addEventListener("click", () => {
+        intro.classList.add("hidden");
+        quiz.classList.remove("hidden");
+      });
+
+      answerBtn.addEventListener("click", () => {
+        const selected = document.querySelector("input[name='pokemon']:checked");
+
+        if (!selected) {
+          feedback.textContent = "Elige una opción para continuar 💗";
+          feedback.className = "feedback error";
+          return;
+        }
+
+        if (selected.value === "charizard") {
+          feedback.textContent = "¡Correcto! 💘";
+          feedback.className = "feedback success";
+          quiz.classList.add("hidden");
+          letter.classList.remove("hidden");
+          typeMessage(romanticMessage, 16);
+        } else {
+          feedback.textContent = "Ups, intenta otra vez amorcito 🥰";
+          feedback.className = "feedback error";
+        }
+      });
+    </script>
+  </body>
+</html>
